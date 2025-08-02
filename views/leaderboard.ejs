@@ -1,0 +1,41 @@
+<%- include("header.ejs") %>
+
+    <main class="main-content">
+        <h1 style="color: white; margin-bottom: 30px;">🏆 Top Interns Leaderboard</h1>
+
+        <ul class="leaderboard-list" id="leaderboard">
+            <li class="leaderboard-item">
+                <span class="rank">
+                    Rank
+                </span>
+                <span class="username">
+                    <span>
+                        Name
+                    </span>
+                    <span>
+                        Total Donations
+                    </span>
+                </span>
+            </li>
+            <% users.forEach((user, index)=> { %>
+                <li class="leaderboard-item <%= index < 3 ? 'top' + (index + 1) : '' %>">
+                    <span class="rank">
+                        <% if(index===0) { %> 🥇 <% } else if(index===1) { %> 🥈 <% } else if(index===2) { %> 🥉 <% }
+                                        else { %>
+                                        <%= index + 1 %>. <% } %>
+                    </span>
+                    <span class="username">
+                        <span>
+                            <%= user.name %>
+                        </span>
+                        <span>
+                            ₹ <%= user.total_donations %>
+                        </span>
+
+                    </span>
+                </li>
+                <% }); %>
+        </ul>
+    </main>
+
+    <%- include("footer.ejs") -%>

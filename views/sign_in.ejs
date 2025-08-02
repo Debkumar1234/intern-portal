@@ -1,0 +1,19 @@
+<%- include("header.ejs") %>
+
+  <main class="main-content">
+    <div class="form-wrapper">
+      <p class="start-text">START FOR FREE</p>
+      <h1>Welcome to Intern-Portal<span class="accent-dot">.</span></h1>
+      <p class="member-text">Not registered? <a href="/signup">Sign Up</a></p>
+
+      <form method="POST" action="/signin">
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <div class="button-row">
+          <button type="submit" class="primary-btn">Sign in</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+<%- include("footer.ejs") %>

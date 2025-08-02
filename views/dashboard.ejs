@@ -1,0 +1,65 @@
+<%- include("header.ejs") %>
+    <main class="main-content">
+        <div class="dashboard-container">
+            <header class="dashboard-header">
+                <h1>Welcome, <span class="user-name">
+                        <%= user.name %>
+                    </span>
+                </h1>
+                <p class="subtitle">You're doing amazing work! 💪</p>
+            </header>
+
+            <section class="stats-section">
+                <div class="stat-card">
+                    <h3>Referral Code</h3>
+                    <p class="stat-value">
+                        <%= user.referral_code %>
+                    </p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Donations</h3>
+                    <p class="stat-value">₹<%= user.total_donations %>
+                    </p>
+                </div>
+            </section>
+
+            <section class="rewards-section">
+                <h2>🎁 Rewards & Unlockables</h2>
+                <div class="rewards-grid">
+                    <% const rewards=[ { title: "Milestone 1" , description: "Raised ₹500+" , amount: 500 }, {
+                        title: "Shoutout on Socials" , description: "Earned after ₹1000" , amount: 1000 }, {
+                        title: "Milestone 2" , description: "Raised ₹1500+" , amount: 1500 }, { title: "Milestone 3" ,
+                        description: "Raised ₹2000+" , amount: 2000 }, { title: "Milestone 4" ,
+                        description: "Raised ₹2500+" , amount: 2500 }, { title: "Milestone 5" ,
+                        description: "Raised ₹3000+" , amount: 3000 }, { title: "Milestone 6" ,
+                        description: "Raised ₹3500+" , amount: 3500 }, { title: "Milestone 7" ,
+                        description: "Raised ₹4000+" , amount: 4000 }, { title: "Milestone 8" ,
+                        description: "Raised ₹4500+" , amount: 4500 }, { title: "Milestone 9" ,
+                        description: "Raised ₹5000+" , amount: 5000 }, { title: "Milestone 10" ,
+                        description: "Raised ₹5500+" , amount: 5500 }, { title: "Milestone 11" ,
+                        description: "Raised ₹6000+" , amount: 6000 }, { title: "Milestone 12" ,
+                        description: "Raised ₹6500+" , amount: 6500 }, { title: "Milestone 13" ,
+                        description: "Raised ₹7000+" , amount: 7000 }, { title: "Milestone 14" ,
+                        description: "Raised ₹7500+" , amount: 7500 }, { title: "Milestone 15" ,
+                        description: "Raised ₹8000+" , amount: 8000 }, { title: "Milestone 16" ,
+                        description: "Raised ₹8500+" , amount: 8500 }, { title: "Milestone 17" ,
+                        description: "Raised ₹9000+" , amount: 9000 }, { title: "Milestone 18" ,
+                        description: "Raised ₹9500+" , amount: 9500 }, { title: "Milestone 19" ,
+                        description: "Raised ₹10000+" , amount: 10000 } ]; rewards.forEach(reward=> {
+                        const achieved = user.total_donations >= reward.amount;
+                        %>
+                        <div class="reward-card <%= achieved ? 'achieved' : 'not-achieved' %>">
+                            <p>
+                                <%= reward.title %>
+                            </p>
+                            <span>
+                                <%= reward.description %>
+                            </span>
+                        </div>
+                        <% }); %>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <%- include("footer.ejs") %>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In | Intern-Portal</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-image"></div>
+    <header class="top-header">
+        <div class="logo">
+            <span class="logo-dot"></span>
+            <span>Intern-Portal</span>
+        </div>
+        <nav>
+            <a href="/leaderboard">Leader Board</a>
+            <a href="/dashboard">Dashboard</a>
+            <% if (typeof userId !== 'undefined' && userId) { %>
+                <a href="/signout">Sign Out</a>
+            <% } else { %>
+                <a href="/signin">Sign In</a>
+                <a href="/signup">Sign Up</a>
+            <% } %>
+        </nav>
+    </header>
