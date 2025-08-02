@@ -4,8 +4,7 @@ const bodyParser = require("body-parser");
 const { Pool } = require("pg");
 const path = require("path");
 const session = require("express-session");
-require('dotenv').config();
-
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,8 +16,8 @@ if (!process.env.DATABASE_URL) {
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false
-  }
+    rejectUnauthorized: false,
+  },
 });
 
 // Middleware
@@ -34,37 +33,47 @@ app.use(
     secret: process.env.SESSION_SECRET, // replace with a strong secret in production
     resave: false,
     saveUninitialized: false,
-    cookie: { path: '/', secure: false, httpOnly: true, maxAge: 6000000 }, // set secure: true if using HTTPS
+    cookie: { path: "/", secure: false, httpOnly: true, maxAge: 6000000 }, // set secure: true if using HTTPS
   })
 );
+
+// Add root route redirecting to /signin or /dashboard based on session
+app.get("/", (req, res) => {
+  if (req.session.userId) {
+    res.redirect("/dashboard");
+  } else {
+    res.redirect("/signin");
+  }
+});
 
 // Routes
 app.get("/signup", (req, res) => {
   res.render("sign_up", { userId: req.session.userId });
 });
 
-app.post('/signup', async (req, res) => {
-  const { firstName, lastName, email, password, referralCode, donationAmount } = req.body;
-  const name = firstName + ' ' + lastName;
+app.post("/signup", async (req, res) => {
+  const { firstName, lastName, email, password, referralCode, donationAmount } =
+    req.body;
+  const name = firstName + " " + lastName;
 
   try {
     // Insert into users table with referral_code and total_donations
     const userResult = await pool.query(
-      'INSERT INTO users (name, referral_code, total_donations) VALUES ($1, $2, $3) RETURNING id',
+      "INSERT INTO users (name, referral_code, total_donations) VALUES ($1, $2, $3) RETURNING id",
       [name, referralCode, donationAmount || 0]
     );
     const userId = userResult.rows[0].id;
 
     // Insert into credentials table
     await pool.query(
-      'INSERT INTO credentials (user_id, email, password) VALUES ($1, $2, $3)',
+      "INSERT INTO credentials (user_id, email, password) VALUES ($1, $2, $3)",
       [userId, email, password] // Hash password in production
     );
 
-    res.redirect('/signin');
+    res.redirect("/signin");
   } catch (error) {
     console.error(error);
-    res.render('sign_up', { error: 'Error creating account' });
+    res.render("sign_up", { error: "Error creating account" });
   }
 });
 
@@ -77,15 +86,16 @@ function isAuthenticated(req, res, next) {
     next();
   } else {
     console.log("User not authenticated");
-    res.redirect('/signin');
+    res.redirect("/signin");
   }
 }
 
 app.post("/signin", async (req, res) => {
   const { email, password } = req.body;
-  const result = await pool.query("SELECT * FROM credentials WHERE email = $1", [
-    email,
-  ]);
+  const result = await pool.query(
+    "SELECT * FROM credentials WHERE email = $1",
+    [email]
+  );
   const credential = result.rows[0];
 
   if (credential && credential.password == password) {
@@ -100,7 +110,9 @@ app.post("/signin", async (req, res) => {
 
 app.get("/dashboard", isAuthenticated, async (req, res) => {
   console.log("User ID from session:", req.session.userId);
-  const result = await pool.query("SELECT * FROM users WHERE id = $1", [req.session.userId]);
+  const result = await pool.query("SELECT * FROM users WHERE id = $1", [
+    req.session.userId,
+  ]);
   const user = result.rows[0];
   res.render("dashboard", { user, userId: req.session.userId });
 });
